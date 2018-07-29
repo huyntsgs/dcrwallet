@@ -21,6 +21,7 @@ import (
 	"github.com/decred/dcrwallet/internal/prompt"
 	"github.com/decred/dcrwallet/loader"
 	"github.com/decred/dcrwallet/wallet"
+	_ "github.com/decred/dcrwallet/wallet/drivers/badgerdb"
 	_ "github.com/decred/dcrwallet/wallet/drivers/bdb"
 	"github.com/decred/dcrwallet/walletseed"
 )
@@ -52,7 +53,7 @@ func createWallet(ctx context.Context, cfg *config) error {
 		VotingAddress: cfg.TBOpts.VotingAddress.Address,
 		TicketFee:     cfg.TicketFee.ToCoin(),
 	}
-	loader := loader.NewLoader(activeNet.Params, dbDir, stakeOptions,
+	loader := loader.NewLoader(activeNet.Params, dbDir, cfg.DbDriver, stakeOptions,
 		cfg.GapLimit, cfg.AllowHighFees, cfg.RelayFee.ToCoin(), cfg.AccountGapLimit)
 
 	var privPass, pubPass, seed []byte

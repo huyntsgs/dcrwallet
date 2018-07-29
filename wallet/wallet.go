@@ -3266,6 +3266,7 @@ func (w *Wallet) StakeInfo() (*StakeInfoData, error) {
 			res.Sdiff = sdiff
 		}
 		it := w.TxStore.IterateTickets(dbtx)
+		defer it.Close()
 		for it.Next() {
 			// Skip tickets which are not owned by this wallet.
 			owned, err := w.hasVotingAuthority(addrmgrNs, &it.MsgTx)
@@ -3366,6 +3367,7 @@ func (w *Wallet) StakeInfoPrecise(chainClient *dcrrpcclient.Client) (*StakeInfoD
 			res.Sdiff = sdiff
 		}
 		it := w.TxStore.IterateTickets(dbtx)
+		defer it.Close()
 		for it.Next() {
 			// Skip tickets which are not owned by this wallet.
 			owned, err := w.hasVotingAuthority(addrmgrNs, &it.MsgTx)

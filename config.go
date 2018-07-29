@@ -29,6 +29,7 @@ import (
 )
 
 const (
+	defaultDbDriver            = "bdb"
 	defaultCAFilename          = "dcrd.cert"
 	defaultConfigFilename      = "dcrwallet.conf"
 	defaultLogLevel            = "info"
@@ -116,6 +117,7 @@ type config struct {
 	TicketFee           *cfgutil.AmountFlag  `long:"ticketfee" description:"Sets the wallet's ticket fee per kb"`
 	AccountGapLimit     int                  `long:"accountgaplimit" description:"Number of accounts that can be created in a row without using any of them"`
 	legacyTicketBuyer   bool
+	DbDriver            string `long:"dbdriver" description:"Sets the database driver to use for the wallet's data"`
 
 	// RPC client options
 	RPCConnect       string                  `short:"c" long:"rpcconnect" description:"Hostname/IP and port of dcrd RPC server to connect to"`
@@ -342,6 +344,7 @@ func loadConfig(ctx context.Context) (*config, []string, error) {
 
 	// Default config.
 	cfg := config{
+		DbDriver:               defaultDbDriver,
 		DebugLevel:             defaultLogLevel,
 		ConfigFile:             cfgutil.NewExplicitString(defaultConfigFile),
 		AppDataDir:             cfgutil.NewExplicitString(defaultAppDataDir),

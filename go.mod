@@ -1,6 +1,7 @@
 module github.com/decred/dcrwallet
 
 require (
+	github.com/AndreasBriese/bbloom v0.0.0-20170702084017-28f7e881ca57 // indirect
 	github.com/decred/dcrd/addrmgr v1.0.2
 	github.com/decred/dcrd/blockchain v1.0.2
 	github.com/decred/dcrd/blockchain/stake v1.0.2
@@ -31,9 +32,12 @@ require (
 	github.com/decred/dcrwallet/wallet v1.0.0
 	github.com/decred/dcrwallet/walletseed v1.0.0
 	github.com/decred/slog v1.0.0
+	github.com/dgraph-io/badger v1.5.3 // indirect
+	github.com/dgryski/go-farm v0.0.0-20180109070241-2de33835d102 // indirect
 	github.com/gorilla/websocket v1.2.0
 	github.com/jessevdk/go-flags v1.4.0
 	github.com/jrick/logrotate v1.0.0
+	github.com/pkg/errors v0.8.0 // indirect
 	golang.org/x/crypto v0.0.0-20180808211826-de0752318171
 	google.golang.org/grpc v1.14.0
 )

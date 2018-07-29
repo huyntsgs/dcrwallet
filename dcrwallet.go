@@ -157,7 +157,7 @@ func run(ctx context.Context) error {
 		StakePoolColdExtKey: cfg.StakePoolColdExtKey,
 		TicketFee:           cfg.TicketFee.ToCoin(),
 	}
-	loader := ldr.NewLoader(activeNet.Params, dbDir, stakeOptions,
+	loader := ldr.NewLoader(activeNet.Params, dbDir, cfg.DbDriver, stakeOptions,
 		cfg.GapLimit, cfg.AllowHighFees, cfg.RelayFee.ToCoin(), cfg.AccountGapLimit)
 
 	// Stop any services started by the loader after the shutdown procedure is

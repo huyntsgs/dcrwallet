@@ -15,6 +15,7 @@ import (
 	"github.com/decred/dcrwallet/errors"
 	"github.com/decred/dcrwallet/ticketbuyer"
 	"github.com/decred/dcrwallet/wallet"
+	_ "github.com/decred/dcrwallet/wallet/drivers/badgerdb"
 	_ "github.com/decred/dcrwallet/wallet/drivers/bdb" // driver loaded during init
 )
 
@@ -36,6 +37,7 @@ type Loader struct {
 	dbDirPath   string
 	wallet      *wallet.Wallet
 	db          wallet.DB
+	dbDriver    string
 
 	purchaseManager *ticketbuyer.PurchaseManager
 	ntfnClient      wallet.MainTipChangedNotificationsClient
@@ -61,12 +63,13 @@ type StakeOptions struct {
 }
 
 // NewLoader constructs a Loader.
-func NewLoader(chainParams *chaincfg.Params, dbDirPath string, stakeOptions *StakeOptions, gapLimit int,
+func NewLoader(chainParams *chaincfg.Params, dbDirPath string, dbDriver string, stakeOptions *StakeOptions, gapLimit int,
 	allowHighFees bool, relayFee float64, accountGapLimit int) *Loader {
 
 	return &Loader{
 		chainParams:     chainParams,
 		dbDirPath:       dbDirPath,
+		dbDriver:        dbDriver,
 		stakeOptions:    stakeOptions,
 		gapLimit:        gapLimit,
 		accountGapLimit: accountGapLimit,
@@ -153,7 +156,7 @@ func (l *Loader) CreateWatchingOnlyWallet(extendedPubKey string, pubPass []byte)
 	if err != nil {
 		return nil, errors.E(op, err)
 	}
-	db, err := wallet.CreateDB("bdb", dbPath)
+	db, err := wallet.CreateDB(l.dbDriver, dbPath)
 	if err != nil {
 		return nil, errors.E(op, err)
 	}
@@ -244,7 +247,7 @@ func (l *Loader) CreateNewWallet(pubPassphrase, privPassphrase, seed []byte) (w 
 	if err != nil {
 		return nil, errors.E(op, err)
 	}
-	db, err := wallet.CreateDB("bdb", dbPath)
+	db, err := wallet.CreateDB(l.dbDriver, dbPath)
 	if err != nil {
 		return nil, errors.E(op, err)
 	}
@@ -299,7 +302,7 @@ func (l *Loader) OpenExistingWallet(pubPassphrase []byte) (w *wallet.Wallet, rer
 
 	// Open the database using the boltdb backend.
 	dbPath := filepath.Join(l.dbDirPath, walletDbName)
-	db, err := wallet.OpenDB("bdb", dbPath)
+	db, err := wallet.OpenDB(l.dbDriver, dbPath)
 	if err != nil {
 		log.Errorf("Failed to open database: %v", err)
 		return nil, errors.E(op, err)
